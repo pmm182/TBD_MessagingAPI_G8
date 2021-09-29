@@ -45,14 +45,9 @@ sudo systemctl start mongodb
 
 ## Utilização
 
-## Colaboradores
-
-Eduardo Garcia do Nascimento
-github.com/egnascimento
-
-
-Patricia Megumi Matsumoto
-github.com/pmm182
+## Colaboradores em ordem alfabética
+[Eduardo Garcia do Nascimento](http://github.com/egnascimento)
+[Patricia Megumi Matsumoto](http://github.com/pmm182)
 
 
 
