@@ -9,11 +9,15 @@ app = Flask(__name__)
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/messaging8'
 mongo = PyMongo(app)
 
+
 @app.route('/users', methods=['POST'])
 def create_user():
-    # Receiving Data
     name = request.json['name']
     username = request.json['username']
+
+    duplicate = mongo.db.users.find_one({'username': username}, {})
+    if duplicate is not None:
+        return user_exists()
 
     if name and username:
         _id = mongo.db.users.insert(
@@ -23,7 +27,7 @@ def create_user():
             'name': name,
             'username': username
         })
-        response.status_code = 201
+        response.status_code = 200
         return response
     else:
         return not_found()
@@ -45,26 +49,37 @@ def get_user(id):
 
 
 @app.route('/users/<id>', methods=['DELETE'])
-def delete_user(id):
-    mongo.db.users.delete_one({'_id': ObjectId(id)})
-    response = jsonify({'message': 'User' + id + ' Deleted Successfully'})
+def delete_user(_id):
+    mongo.db.users.delete_one({'_id': ObjectId(_id)})
+    response = jsonify({'message': 'User' + _id + ' Deleted Successfully'})
     response.status_code = 200
     return response
 
 
-@app.route('/users/<_id>', methods=['PUT'])
-def update_user(_id):
-    username = request.json['username']
-    email = request.json['email']
-    password = request.json['password']
-    if username and email and password and _id:
-        hashed_password = generate_password_hash(password)
-        mongo.db.users.update_one(
-            {'_id': ObjectId(_id['$oid']) if '$oid' in _id else ObjectId(_id)},
-            {'$set': {'username': username, 'email': email, 'password': hashed_password}})
-        response = jsonify({'message': 'User' + _id + 'Updated Successfuly'})
+@app.route('/rooms', methods=['POST'])
+def create_room():
+    name = request.json['name']
+    members = request.json['members']
+
+    if members:
+        _id = mongo.db.rooms.insert(
+            {'name': name, 'members': members})
+        response = jsonify({
+            '_id': str(_id),
+        })
         response.status_code = 200
         return response
+    else:
+        return not_found()
+
+
+@app.route('/rooms/<username>', methods=['GET'])
+def get_rooms(username):
+    rooms = mongo.db.rooms.find({'members': username }, {'_id': False, 'name': True})
+
+    if rooms.count() > 0:
+        response = json_util.dumps(rooms)
+        return Response(response, mimetype="application/json")
     else:
         return not_found()
 
@@ -77,6 +92,17 @@ def not_found(error=None):
     }
     response = jsonify(message)
     response.status_code = 404
+    return response
+
+
+@app.errorhandler(409)
+def user_exists(error=None):
+    message = {
+        'message': 'User already exists. ' + request.url,
+        'status': 409
+    }
+    response = jsonify(message)
+    response.status_code = 409
     return response
 
 
@@ -102,26 +128,6 @@ def create_message():
             '_id': str(_id),
             'room_id': room_id,
             'message': message,
-        })
-        response.status_code = 201
-        return response
-    else:
-        return not_found()
-
-
-@app.route('/rooms', methods=['POST'])
-def create_room():
-    # Receiving Data
-    name = request.json['name']
-    members = request.json['members']
-
-    if name and members:
-        id = mongo.db.users.insert(
-            {'name': name, 'members': members})
-        response = jsonify({
-            '_id': str(id),
-            'name': name,
-            'members': members,
         })
         response.status_code = 201
         return response
