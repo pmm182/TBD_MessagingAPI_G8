@@ -11,6 +11,9 @@ Para instalar e utilizar este software, são pré-requisitos:
 Pequenas variações a este pré-requisitos podem ser adotadas desde que haja conhecimento mais abrangente da solução e tecnologias aqui utilizadas.
 
 ## Instalação
+Abaixo estão listados os componentes que necessitam ser instalados caso o computador host tenha uma instalação linux limpa.
+
+### MongoDB
 Embora o MongoDB seja um aplicativo bem conhecido, ele não está nos repositórios oficiais do Ubuntu. Portanto, você terá que adicioná-lo manualmente.No entanto, essa é uma grande vantagem porque facilita a instalação e a atualização do aplicativo. Se você estiver usando o Ubuntu 18.04, abra o terminal e adicione a chave PGP do repositório do MongoDB para não comprometer os pacotes baixados:
 
 ```console
@@ -43,10 +46,15 @@ sudo systemctl enable mongodb
 sudo systemctl start mongodb
 ```
 
+### Python e respectivos pacotes
+Listar aqui como instalar os pacotes e python possivelmente.
+
 ## Utilização
+Listar aqui a utilização. Como rodar.
 
 ## Colaboradores em ordem alfabética
 [Eduardo Garcia do Nascimento](http://github.com/egnascimento)
+
 [Patricia Megumi Matsumoto](http://github.com/pmm182)
 
 
