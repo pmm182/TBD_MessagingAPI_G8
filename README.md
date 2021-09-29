@@ -56,3 +56,6 @@ Listar aqui a utilização. Como rodar.
 [![Eduardo Garcia do Nascimento](https://media-exp1.licdn.com/dms/image/C4E03AQGEPa58IfFEQw/profile-displayphoto-shrink_200_200/0/1552925873680?e=1638403200&v=beta&t=GCfyuRq7bmpMsiPuvDohIKdq2wnSDvf9X9C9spHrJes)](http://github.com/egnascimento) Eduardo Garcia do Nascimento
 
 [![Patricia Megumi Matsumoto](https://media-exp1.licdn.com/dms/image/C4E03AQEDdBhHOStfqg/profile-displayphoto-shrink_200_200/0/1517729285232?e=1638403200&v=beta&t=IqAPNnU0ZEd3hFRm3yCv9yRjwxRscl2dAKH9BHhLk98)](http://github.com/pmm182) Patrícia Megumi Matsumoto
+
+## Agradecimentos
+Agrademos à [Profa. Sahudy Montenegro Gonzales](https://www.linkedin.com/in/sahudy-montenegro-gonzalez/) pela movitação para este trabalho, orientação e ensinamentos durante as aulas da matéria "Tópicos em Banco de Dados" do Programa de Pós graduação em Ciências da Computação da UFSCar.
