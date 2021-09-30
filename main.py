@@ -73,8 +73,9 @@ def create_room():
         return not_found()
 
 
-@app.route('/rooms/<username>', methods=['GET'])
-def get_rooms(username):
+@app.route('/rooms', methods=['GET'])
+def get_rooms():
+    username = request.json['username']
     rooms = mongo.db.rooms.find({'members': username }, {'_id': False, 'name': True})
 
     if rooms.count() > 0:
@@ -106,15 +107,15 @@ def user_exists(error=None):
     return response
 
 
-@app.route('/messages', methods=['POST'])
-def create_message():
+@app.route('/rooms/<id>/messages', methods=['POST'])
+def create_message(id):
     # Receiving Data
-    room_id = request.json['room_id']
-    user = request.json['user']
+    room_id = id
+    username = request.json['username']
     text = request.json['message']
     now = datetime.now()
 
-    message = {'from': user, 'date': now, 'message': text}
+    message = {'from': username, 'date': now, 'message': text}
 
     partition_date = [datetime(now.year, now.month, now.day, now.hour, 0, 0),
                       datetime(now.year, now.month, now.day, now.hour, 59, 59)]
@@ -133,6 +134,17 @@ def create_message():
         return response
     else:
         return not_found()
+
+
+@app.route('/rooms/<id>/messages', methods=['GET'])
+def get_messages(id):
+    # Receiving Data
+    room_id = id
+    #username = request.json['username']
+
+    messages = mongo.db.messages.find({'room_id': room_id}, {'_id': False})
+    response = json_util.dumps(messages)
+    return Response(response, mimetype="application/json")
 
 
 if __name__ == "__main__":
