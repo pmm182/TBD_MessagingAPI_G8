@@ -1,4 +1,4 @@
-from exceptions import AppError
+from src.exceptions import AppError
 
 
 class DuplicateUserError(AppError):

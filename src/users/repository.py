@@ -1,11 +1,10 @@
 from typing import List
 
-from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
 
-from users.data import User
-from users.exceptions import DuplicateUserError, UserNotFoundError
+from src.users.data import User
+from src.users.exceptions import DuplicateUserError, UserNotFoundError
 
 
 class UserRepository:

@@ -1,7 +1,7 @@
 from flask import request, jsonify
 
-from users.data import User
-from users.repository import UserRepository
+from src.users.data import User
+from src.users.repository import UserRepository
 
 
 def register_user_routes(app, user_repository: UserRepository):
