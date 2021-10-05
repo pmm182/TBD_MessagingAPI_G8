@@ -3,8 +3,8 @@ from typing import List
 from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
 
-from src.users.data import User
-from src.users.exceptions import DuplicateUserError, UserNotFoundError
+from users.data import User
+from users.exceptions import DuplicateUserError, UserNotFoundError
 
 
 class UserRepository:

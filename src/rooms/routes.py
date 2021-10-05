@@ -2,10 +2,10 @@ from datetime import datetime
 
 from flask import request, jsonify
 
-from src.rooms.data import Room, Message
-from src.rooms.exceptions import InvalidDataError
-from src.rooms.repository import RoomRepository
-from src.users.repository import UserRepository
+from rooms.data import Room, Message
+from rooms.exceptions import InvalidDataError
+from rooms.repository import RoomRepository
+from users.repository import UserRepository
 
 
 def register_room_routes(app, room_repository: RoomRepository, user_repository: UserRepository):

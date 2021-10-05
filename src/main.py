@@ -3,12 +3,12 @@ import os
 from flask import Flask, jsonify
 from pymongo import MongoClient
 
-from src.config import local_server, docker_server
-from src.exceptions import AppError
-from src.rooms.repository import RoomRepository
-from src.rooms.routes import register_room_routes
-from src.users.repository import UserRepository
-from src.users.routes import register_user_routes
+from config import local_server, docker_server
+from exceptions import AppError
+from rooms.repository import RoomRepository
+from rooms.routes import register_room_routes
+from users.repository import UserRepository
+from users.routes import register_user_routes
 
 
 def register_error_handler(app_):

@@ -4,8 +4,8 @@ from typing import List
 from bson import ObjectId
 from pymongo.database import Database
 
-from src.rooms.data import Room, Message
-from src.rooms.exceptions import RoomNotFoundError, NoSuchMemberFound, MemberNotInRoom
+from rooms.data import Room, Message
+from rooms.exceptions import RoomNotFoundError, NoSuchMemberFound, MemberNotInRoom
 
 
 class RoomRepository:
