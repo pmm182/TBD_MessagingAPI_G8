@@ -4,6 +4,7 @@ ARG APP_USER=tbd8
 ARG APP_DIR=/opt/tbd/src
 
 ENV UWSGI_PROCESSES_COUNT 5
+ENV ENVIRONMENT "DOCKER"
 
 RUN apt update \
     && apt upgrade -y \

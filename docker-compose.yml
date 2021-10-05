@@ -29,3 +29,7 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+    networks:
+      tbd_network:
+        aliases:
+          - app

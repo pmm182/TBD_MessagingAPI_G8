@@ -1,7 +1,9 @@
+import os
+
 from flask import Flask, jsonify
 from pymongo import MongoClient
 
-from src.config import local_server
+from src.config import local_server, docker_server
 from src.exceptions import AppError
 from src.rooms.repository import RoomRepository
 from src.rooms.routes import register_room_routes
@@ -19,7 +21,11 @@ def register_error_handler(app_):
 def get_app():
     app = Flask(__name__)
 
-    server_config = local_server
+    env_type = os.getenv('ENVIRONMENT')
+    if env_type == 'DOCKER':
+        server_config = docker_server
+    else:
+        server_config = local_server
     mongo = MongoClient(
         host=server_config.server, port=server_config.port, username=server_config.username,
         password=server_config.password
