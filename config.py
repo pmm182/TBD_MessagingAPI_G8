@@ -13,3 +13,4 @@ class ServerConfig:
 
 
 local_server = ServerConfig(server='localhost')
+docker_server = ServerConfig(server='mongo')
