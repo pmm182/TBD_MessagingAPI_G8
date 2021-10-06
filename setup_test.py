@@ -1,5 +1,4 @@
 import json
-from threading import Thread
 
 import requests
 

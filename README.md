@@ -3,6 +3,28 @@
 
 O projeto consiste em desenvolver uma aplicação que utiliza banco de dados NoSQL, cuja funcionalidade principal consiste na troca de mensagens entre usuários. A partir dessa aplicação gostaríamos de verificar como o comportamento do sistema varia conforme as configurações do banco de dados são modificadas.
 
+# Rodando com Docker
+
+## Pré-requisitos
+
+* Instalar docker e docker-compose
+
+## Realizando build da imagem da aplicação
+
+* Executar o script **build_image.sh** na raiz do projeto
+
+## Executar a aplicação
+
+* Executar **docker-compose up** na raiz do projeto
+* Instalar biblioteca requests do python
+
+## Executar o teste
+
+* Executar **python3 setup_test.py** na raiz do projeto
+* Executar **python3 app_test.py** na raiz do projeto (usuários cadastrados: joao, eduardo e patricia)
+
+# Rodando localmente
+
 ## Pré-requisitos
 Para instalar e utilizar este software, são pré-requisitos:
 * Computador com Linux instalado (preferencialmente Ubuntu).

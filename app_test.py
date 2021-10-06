@@ -34,9 +34,7 @@ if __name__ == '__main__':
         response = requests.get(get_url(f'rooms/{room_id}/messages'), json=params)
         messages = sorted(response.json(), key=lambda m: m['date'])
         for message in messages:
-            print(f'''
-                  {message['date']} - {message['from']}: {message['message']}
-                  ''')
+            print(f"{message['date']} - {message['from']}: {message['message']}")
             last_seen = message['date']
         sleep(1)
         i += 1
