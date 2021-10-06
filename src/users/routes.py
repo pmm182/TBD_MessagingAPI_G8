@@ -16,7 +16,7 @@ def register_user_routes(app, user_repository: UserRepository):
     @app.route('/users/<username>', methods=['DELETE'])
     def delete_user(username: str):
         user_repository.delete_user(username)
-        return jsonify({'message': f'User {username} created'}), 200
+        return jsonify({'message': f'User {username} deleted. Bye bye {username}.'}), 200
 
     @app.route('/users', methods=['GET'])
     def get_users():
