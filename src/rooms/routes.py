@@ -12,7 +12,7 @@ def register_room_routes(app, room_repository: RoomRepository, user_repository: 
 
     @app.route('/rooms', methods=['PUT'])
     def create_room():
-        name = request.json['name']
+        name = request.json.get('name')
         members = request.json['members']
 
         if members:

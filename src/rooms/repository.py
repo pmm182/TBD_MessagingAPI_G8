@@ -62,7 +62,7 @@ class RoomRepository:
         partition_end = partition_start + timedelta(days=1)
 
         query = {
-            'partition_date': [partition_start, partition_end],
+            'partition_date': [partition_start.isoformat(), partition_end.isoformat()],
             'room_id': message.room_id
         }
         values = {'$push': {'messages': mongo_message}}
@@ -72,11 +72,11 @@ class RoomRepository:
     def get_messages(self, room_id: str, last_seen: datetime = None):
         query_params = {'room_id': room_id}
         if last_seen:
-            query_params['partition_date.1'] = {'$gt': last_seen}
-            query_params['messages.date'] = {'$gt': last_seen}
+            query_params['partition_date.1'] = {'$gt': last_seen.isoformat()}
         partitions = self._messages_collection.find(query_params)
         messages_result = []
         for partition in partitions:
             for message in partition['messages']:
-                messages_result.append(self._create_message_from_mongo(result=message, room_id=room_id))
+                if not last_seen or message['date'] > last_seen:
+                    messages_result.append(self._create_message_from_mongo(result=message, room_id=room_id))
         return messages_result

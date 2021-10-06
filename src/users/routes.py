@@ -8,7 +8,7 @@ def register_user_routes(app, user_repository: UserRepository):
 
     @app.route('/users', methods=['PUT'])
     def create_user():
-        name = request.json['name']
+        name = request.json.get('name')
         username = request.json['username']
         user_repository.insert_user(User(username=username, name=name))
         return jsonify({'message': f'User {username} created'}), 200

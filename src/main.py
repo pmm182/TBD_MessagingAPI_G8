@@ -46,4 +46,4 @@ if __name__ == '__main__':
           'sob diferentes configurações.')
     print("*******************************************************************************************************")
     app_ = get_app()
-    app_.run(debug=True)
+    app_.run(debug=True, port=8080)
