@@ -38,4 +38,4 @@ if __name__ == '__main__':
             last_seen = message['date']
         sleep(1)
         i += 1
-
+        
