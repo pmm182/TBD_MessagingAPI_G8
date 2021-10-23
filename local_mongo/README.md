@@ -17,3 +17,9 @@ Execute o comando abaixo para finalizar o cluster:
 ```
 ./stop.sh
 ```
+
+Caso queira excluir os volumes criados, execute:
+
+```
+./stop.sh "-v"
+```
