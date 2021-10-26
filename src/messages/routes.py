@@ -1,7 +1,5 @@
-import datetime
-from urllib import request
-
-from flask import jsonify
+from datetime import datetime
+from flask import jsonify, request
 
 from messages.data import Message
 from messages.message_repository import MessageRepository
@@ -58,12 +56,12 @@ def register_message_routes(app, room_repository: RoomRepository, message_reposi
 
 def register_simple_message_routes(app, room_repository: RoomRepository, message_repository: MessageRepository):
 
-    @app.route('/simple_message/rooms/<id_>/messages', methods=['PUT'])
+    @app.route('/rooms/<id_>/simple_messages', methods=['PUT'])
     def simple_create_message(id_):
         return _create_message(id_=id_, request_json=request.json, room_repository=room_repository,
                                message_repository=message_repository)
 
-    @app.route('/simple_message/rooms/<id_>/messages', methods=['GET'])
+    @app.route('/rooms/<id_>/simple_messages', methods=['GET'])
     def simple_get_messages(id_):
         return _get_messages(id_=id_, request_json=request.json, room_repository=room_repository,
                              message_repository=message_repository)

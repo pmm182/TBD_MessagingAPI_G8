@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 
+from pymongo import ASCENDING
 from pymongo.database import Database
 
 from messages.data import Message
@@ -50,7 +51,7 @@ class MessagesByRoomRepository(MessageRepository):
             for message in partition['messages']:
                 if not last_seen or message['date'] > last_seen:
                     messages_result.append(self._create_message_from_mongo(result=message, room_id=room_id))
-        return messages_result
+        return sorted(messages_result, key=lambda m: m.date)
 
 
 class SimpleMessageRepository(MessageRepository):
@@ -72,7 +73,7 @@ class SimpleMessageRepository(MessageRepository):
         query_params = {'room_id': room_id}
         if last_seen:
             query_params['date'] = {'$gt': last_seen}
-        messages = self._messages_collection.find(query_params).sort({'date': 1})
+        messages = self._messages_collection.find(query_params).sort([('date', ASCENDING)])
         messages_result = []
         for message in messages:
             messages_result.append(self._create_message_from_mongo(result=message, room_id=room_id))
