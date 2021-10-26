@@ -19,12 +19,11 @@ def register_room_routes(app, room_repository: RoomRepository, user_repository: 
             for member in members:
                 user_repository.get_user(member)
             id_ = room_repository.insert_room(Room(members=members, name=name))
-            return jsonify({'message': f'Successfully created room {id_}'}), 200
+            return jsonify({'room_id': id_}), 200
         else:
             raise InvalidDataError()
 
-    @app.route('/rooms_by_user', methods=['GET'])
-    def get_rooms_by_user():
-        username = request.values['username']
+    @app.route('/rooms_by_user/<username>', methods=['GET'])
+    def get_rooms_by_user(username: str):
         rooms = room_repository.get_rooms_by_member(username=username)
         return jsonify([room.to_dict() for room in rooms]), 200

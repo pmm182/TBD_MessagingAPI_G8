@@ -33,4 +33,4 @@ class TestUsers(TestCommon):
         get_response = self.test_client.get(f'/users')
 
         # VERIFY
-        self.assertEqual(set(users), {u['username'] for u in get_response})
+        self.assertEqual(set(users), {u['username'] for u in get_response.json})
