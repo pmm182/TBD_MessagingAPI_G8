@@ -1,10 +1,9 @@
-from datetime import datetime, timedelta
 from typing import List
 
 from bson import ObjectId
 from pymongo.database import Database
 
-from rooms.data import Room, Message
+from rooms.data import Room
 from rooms.exceptions import RoomNotFoundError, NoSuchMemberFound, MemberNotInRoom
 
 
@@ -13,11 +12,6 @@ class RoomRepository:
     def __init__(self, database: Database):
         self._database = database
         self._rooms_collection = self._database.get_collection('rooms')
-        self._messages_collection = self._database.get_collection('messages')
-
-    @staticmethod
-    def _create_message_from_mongo(result: dict, room_id: str) -> Message:
-        return Message(room_id=room_id, from_=result['from'], message=result['message'], date=result['date'])
 
     @staticmethod
     def _create_room_from_mongo(result: dict) -> Room:
@@ -56,27 +50,3 @@ class RoomRepository:
         if not member:
             raise MemberNotInRoom(username=username, room_id=room_id)
 
-    def insert_message(self, message: Message):
-        mongo_message = {'from': message.from_, 'date': message.date, 'message': message.message}
-        partition_start = message.date.date()
-        partition_end = partition_start + timedelta(days=1)
-
-        query = {
-            'partition_date': [partition_start.isoformat(), partition_end.isoformat()],
-            'room_id': message.room_id
-        }
-        values = {'$push': {'messages': mongo_message}}
-
-        return self._messages_collection.update_one(query, values, upsert=True)
-
-    def get_messages(self, room_id: str, last_seen: datetime = None):
-        query_params = {'room_id': room_id}
-        if last_seen:
-            query_params['partition_date.1'] = {'$gt': last_seen.isoformat()}
-        partitions = self._messages_collection.find(query_params)
-        messages_result = []
-        for partition in partitions:
-            for message in partition['messages']:
-                if not last_seen or message['date'] > last_seen:
-                    messages_result.append(self._create_message_from_mongo(result=message, room_id=room_id))
-        return messages_result

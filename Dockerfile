@@ -4,6 +4,7 @@ ARG APP_USER=tbd8
 ARG APP_DIR=/opt/tbd/src
 
 ENV UWSGI_PROCESSES_COUNT 20
+ENV UWSGI_THREADS_COUNT 25
 ENV ENVIRONMENT "DOCKER"
 
 RUN apt update \
@@ -27,5 +28,5 @@ COPY --chown=${APP_USER}:${APP_USER} ./src ${APP_DIR}
 WORKDIR ${APP_DIR}
 USER ${APP_USER}
 
-CMD ["sh", "-c", "uwsgi --socket 0.0.0.0:8080 --protocol http -w wsgi:app --lazy-apps --processes $UWSGI_PROCESSES_COUNT --master"]
+CMD ["sh", "-c", "uwsgi --socket 0.0.0.0:8080 --protocol http -w wsgi:app --lazy-apps --processes $UWSGI_PROCESSES_COUNT --threads $UWSGI_THREADS_COUNT --master"]
 EXPOSE 8080
