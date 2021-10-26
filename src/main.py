@@ -1,10 +1,11 @@
 import os
 
-from flask import Flask, jsonify, Blueprint
+from flask import Flask, jsonify
 from pymongo import MongoClient
 
 from config import local_server, docker_server, ServerConfig
 from exceptions import AppError
+from common.routes import register_generic_routes
 from messages.message_repository import MessagesByRoomRepository, SimpleMessageRepository
 from messages.routes import register_message_routes, register_simple_message_routes
 from rooms.room_repository import RoomRepository
@@ -30,6 +31,7 @@ def create_app(server_config: ServerConfig):
     user_repository = UserRepository(database)
     room_repository = RoomRepository(database)
     messages_by_room_repository = MessagesByRoomRepository(database)
+    register_generic_routes(app=app, server_config=server_config)
     register_user_routes(app=app, user_repository=user_repository)
     register_room_routes(app=app, user_repository=user_repository, room_repository=room_repository)
     register_message_routes(app=app, room_repository=room_repository, message_repository=messages_by_room_repository)
