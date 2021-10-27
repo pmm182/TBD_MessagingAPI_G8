@@ -16,7 +16,7 @@ def get_url(path_: str):
 if __name__ == '__main__':
     username = input('Type your username: ')
 
-    response = requests.get(get_url('rooms_by_user'), params={'username': username})
+    response = requests.get(get_url(f'rooms_by_user/{username}'))
     room_id = response.json()[0]['id']
     i = 0
     last_seen = None
