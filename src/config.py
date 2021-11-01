@@ -14,3 +14,6 @@ class ServerConfig:
 
 local_server = ServerConfig(server='localhost')
 docker_server = ServerConfig(server='mongo')
+atlas_server = ServerConfig(server='mongodb+srv://cluster0.jjwcl.mongodb.net', 
+                             username='messagingappg8',
+                             password='messagingappg8')
