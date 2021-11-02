@@ -2,15 +2,13 @@ import sys
 
 import requests
 
-sys.path.insert(0, '..')
+sys.path.insert(0, '../..')
 
 import string
 from datetime import datetime
-from random import choice, randint
+from random import choice
 
 from locust import HttpUser, task, events
-
-from test_utils.data_generator import generate_random_str
 
 _room_id = None
 _users = ['sahudy', 'eduardo', 'patricia']

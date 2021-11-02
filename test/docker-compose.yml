@@ -2,7 +2,7 @@ version: '2.4'
 
 services:
   mongo:
-    image: mongo
+    image: mongo:4.4.10
     ports:
       - "27017:27017"
     restart: always

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime, timedelta
 
+import pymongo
 from pymongo import ASCENDING
 from pymongo.database import Database
 
@@ -15,6 +16,10 @@ class MessageRepository(ABC):
 
     @abstractmethod
     def get_messages(self, room_id: str, last_seen: datetime = None):
+        pass
+
+    @abstractmethod
+    def create_indices(self):
         pass
 
 
@@ -53,6 +58,11 @@ class MessagesByRoomRepository(MessageRepository):
                     messages_result.append(self._create_message_from_mongo(result=message, room_id=room_id))
         return sorted(messages_result, key=lambda m: m.date)
 
+    def create_indices(self):
+        self._messages_collection.create_index([
+            ('room_id', pymongo.ASCENDING), ('partition_date', pymongo.ASCENDING)
+        ])
+
 
 class SimpleMessageRepository(MessageRepository):
 
@@ -78,3 +88,8 @@ class SimpleMessageRepository(MessageRepository):
         for message in messages:
             messages_result.append(self._create_message_from_mongo(result=message, room_id=room_id))
         return messages_result
+
+    def create_indices(self):
+        self._messages_collection.create_index([
+            ('room_id', pymongo.ASCENDING), ('partition_date', pymongo.ASCENDING)
+        ])
