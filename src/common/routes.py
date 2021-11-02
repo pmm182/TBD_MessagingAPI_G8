@@ -19,12 +19,12 @@ def _create_indices(message_repository: MessageRepository):
 def register_messages_indices_routes(app, message_repository: MessageRepository):
 
     @app.route('/messages/indices', methods=['POST'])
-    def create_message():
+    def create_message_indices():
         return _create_indices(message_repository=message_repository)
 
 
 def register_simple_messages_indices_routes(app, message_repository: MessageRepository):
 
     @app.route('/simple_messages/indices', methods=['POST'])
-    def create_message():
+    def create_simple_message_indices():
         return _create_indices(message_repository=message_repository)
