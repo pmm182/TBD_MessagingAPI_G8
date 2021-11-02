@@ -46,11 +46,21 @@ class PutMessages(HttpUser):
     def _generate_random_str(length: int = 32):
         return ''.join([choice(string.digits + string.ascii_letters + ' ') for __ in range(length)])
 
-    @task
-    def put_messages(self):
+    def _put_messages(self, message_len: int):
         self.client.put(f'/rooms/{_room_id}/messages',
                         json={'username': self.username,
-                              'message': generate_random_str(randint(1, 512)),
+                              'message': f'{self._generate_random_str(message_len)}',
                               'date': datetime.utcnow().isoformat()}
                         )
 
+    @task
+    def put_small_messages(self):
+        self._put_messages(message_len=50)
+
+    @task
+    def put_medium_messages(self):
+        self._put_messages(message_len=100)
+
+    @task
+    def put_big_messages(self):
+        self._put_messages(message_len=256)
