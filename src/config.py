@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
+import os
 
 
 @dataclass
@@ -14,3 +15,6 @@ class ServerConfig:
 
 local_server = ServerConfig(server='localhost')
 docker_server = ServerConfig(server='mongo')
+atlas_server = ServerConfig(server='mongodb+srv://cluster0.jjwcl.mongodb.net', 
+                            username=os.getenv('MONGODB_USERNAME'),
+                            password=os.getenv('MONGODB_PASSWORD'))

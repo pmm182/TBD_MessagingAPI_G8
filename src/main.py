@@ -3,7 +3,7 @@ import os
 from flask import Flask, jsonify
 from pymongo import MongoClient
 
-from config import local_server, docker_server, ServerConfig
+from config import local_server, docker_server, atlas_server, ServerConfig
 from exceptions import AppError
 from common.routes import register_generic_routes
 from messages.message_repository import MessagesByRoomRepository, SimpleMessageRepository
@@ -44,8 +44,11 @@ def create_app(server_config: ServerConfig):
 
 def get_app():
     env_type = os.getenv('ENVIRONMENT')
+    print('Loading DB from environment:', env_type)
     if env_type == 'DOCKER':
         server_config = docker_server
+    elif env_type == 'ATLAS':
+        server_config = atlas_server
     else:
         server_config = local_server
     return create_app(server_config)
