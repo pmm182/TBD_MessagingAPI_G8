@@ -11,6 +11,11 @@ def register_generic_routes(app, mongo: MongoClient, database_name: str):
         mongo.drop_database(database_name)
         return '', 200
 
+    @app.route('/write_concern', methods=['GET'])
+    def write_concern():
+        return jsonify({'write_concern': mongo.write_concern}), 200
+
+
 def _create_indices(message_repository: MessageRepository):
     message_repository.create_indices()
     return jsonify({'message': 'Indices created'}), 200

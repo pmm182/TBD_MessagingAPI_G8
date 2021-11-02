@@ -24,9 +24,10 @@ def register_error_handler(app_):
 
 def create_app(server_config: ServerConfig):
     app = Flask(__name__)
+    write_concern = os.getenv('WRITE_CONCERN', 1)
     mongo = MongoClient(
         host=server_config.server, port=server_config.port, username=server_config.username,
-        password=server_config.password
+        password=server_config.password, w=write_concern
     )
     database = mongo.get_database(server_config.database)
     user_repository = UserRepository(database)
