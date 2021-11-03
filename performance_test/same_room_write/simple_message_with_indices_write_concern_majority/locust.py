@@ -1,70 +1,61 @@
-import sys
+from time import sleep
 
-import requests
+from locust.runners import WorkerRunner
 
-sys.path.insert(0, '../..')
+from base_test import _send_room_id, _receive_room_id, _on_locust_init, BasePutMessages, _setup_test
 
-import string
-from datetime import datetime
-from random import choice
-
-from locust import HttpUser, task, events
+from locust import events, task, HttpUser
 
 _room_id = None
 _users = ['sahudy', 'eduardo', 'patricia']
+_messages_route = 'simple_messages'
 
 
 @events.test_start.add_listener
 def on_test_start(environment, **kwargs):
     global _room_id
 
-    print('Cleaning up...')
-    response = requests.get(f'{environment.host}/clear')
-    if response.status_code != 200:
-        raise Exception(f'Error cleaning up: {response.status_code}')
-    response = requests.post(f'{environment.host}/simple_messages/indices')
-    if response.status_code != 200:
-        raise Exception(f'Error creating indices: {response.status_code}')
-    response = requests.get(f'{environment.host}/write_concern')
-    if response.status_code != 200 or response.json()['write_concern'] != 'majority':
-        raise Exception(f'Please set the WRITE_CONCERN env var as majority before starting the app')
+    if not isinstance(environment.runner, WorkerRunner):
+        _room_id = _setup_test(
+            environment, create_indices=True, message_base_route=_messages_route, write_concern_majority=True,
+            users=_users
+        )
+    else:
+        while not _room_id:
+            environment.runner.send_message('send_room_id')
+            sleep(1)
 
-    # Creating users
-    for username in _users:
-        response = requests.put(f'{environment.host}/users', json={'username': username})
-        if response.status_code != 200:
-            raise Exception(response.json())
 
-    # Create room
-    response = requests.put(f'{environment.host}/rooms', json={'name': 'Test room', 'members': _users})
-    _room_id = response.json()['room_id']
+def send_room_id(environment, msg, **kwargs):
+    global _room_id
+    _send_room_id(environment, room_id=_room_id)
+
+
+def receive_room_id(msg, **kwargs):
+    global _room_id
+    _room_id = _receive_room_id(msg)
+
+
+@events.init.add_listener
+def on_locust_init(environment, **_kwargs):
+    _on_locust_init(environment, send_room_id_func=send_room_id, receive_room_id_func=receive_room_id)
 
 
 class PutMessages(HttpUser):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.username = _users[0]
-
-    @staticmethod
-    def _generate_random_str(length: int = 32):
-        return ''.join([choice(string.digits + string.ascii_letters + ' ') for __ in range(length)])
-
-    def _put_messages(self, message_len: int):
-        self.client.put(f'/rooms/{_room_id}/simple_messages',
-                        json={'username': self.username,
-                              'message': f'{self._generate_random_str(message_len)}',
-                              'date': datetime.utcnow().isoformat()}
-                        )
+        self._base_test = BasePutMessages(app_users_=_users, room_id=_room_id, messages_route=_messages_route,
+                                          client=self.client)
 
     @task
     def put_small_messages(self):
-        self._put_messages(message_len=50)
+        self._base_test.put_messages(message_len=50)
 
     @task
     def put_medium_messages(self):
-        self._put_messages(message_len=100)
+        self._base_test.put_messages(message_len=100)
 
     @task
     def put_big_messages(self):
-        self._put_messages(message_len=256)
+        self._base_test.put_messages(message_len=256)
