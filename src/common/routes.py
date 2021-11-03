@@ -6,6 +6,10 @@ from messages.message_repository import MessageRepository
 
 def register_generic_routes(app, mongo: MongoClient, database_name: str):
 
+    @app.route('/health', methods=['GET'])
+    def health():
+        return '', 200
+
     @app.route('/clear', methods=['GET'])
     def clear():
         mongo.drop_database(database_name)

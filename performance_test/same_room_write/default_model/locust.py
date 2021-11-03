@@ -1,6 +1,8 @@
 import sys
+from time import sleep
 
 import requests
+from locust.runners import MasterRunner, WorkerRunner
 
 sys.path.insert(0, '../..')
 
@@ -18,20 +20,43 @@ _users = ['sahudy', 'eduardo', 'patricia']
 def on_test_start(environment, **kwargs):
     global _room_id
 
-    print('Cleaning up...')
-    response = requests.get(f'{environment.host}/clear')
-    if response.status_code != 200:
-        raise Exception(f'Error cleaning up: {response.status_code}')
-
-    # Creating users
-    for username in _users:
-        response = requests.put(f'{environment.host}/users', json={'username': username})
+    if not isinstance(environment.runner, WorkerRunner):
+        print('Cleaning up...')
+        response = requests.get(f'{environment.host}/clear')
         if response.status_code != 200:
-            raise Exception(response.json())
+            raise Exception(f'Error cleaning up: {response.status_code}')
 
-    # Create room
-    response = requests.put(f'{environment.host}/rooms', json={'name': 'Test room', 'members': _users})
-    _room_id = response.json()['room_id']
+        # Creating users
+        for username in _users:
+            response = requests.put(f'{environment.host}/users', json={'username': username})
+            if response.status_code != 200:
+                raise Exception(response.json())
+
+        # Create room
+        response = requests.put(f'{environment.host}/rooms', json={'name': 'Test room', 'members': _users})
+        _room_id = response.json()['room_id']
+    else:
+        while not _room_id:
+            environment.runner.send_message('send_room_id')
+            sleep(1)
+
+
+def send_room_id(environment, msg, **kwargs):
+    global _room_id
+    environment.runner.send_message('receive_room_id', _room_id)
+
+
+def receive_room_id(msg, **kwargs):
+    global _room_id
+    _room_id = msg.data
+
+
+@events.init.add_listener
+def on_locust_init(environment, **_kwargs):
+    if not isinstance(environment.runner, WorkerRunner):
+        environment.runner.register_message('send_room_id', send_room_id)
+    if not isinstance(environment.runner, MasterRunner):
+        environment.runner.register_message('receive_room_id', receive_room_id)
 
 
 class PutMessages(HttpUser):
