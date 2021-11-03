@@ -32,3 +32,4 @@ services:
       - ./:/mnt/locust
       - ../base_test.py:/mnt/locust/base_test.py
     command: -f /mnt/locust/locust.py --worker --master-host master
+
