@@ -2,15 +2,13 @@ import sys
 
 import requests
 
-sys.path.insert(0, '..')
+sys.path.insert(0, '../..')
 
 import string
 from datetime import datetime
-from random import choice, randint
+from random import choice
 
 from locust import HttpUser, task, events
-
-from test_utils.data_generator import generate_random_str
 
 _room_id = None
 _users = ['sahudy', 'eduardo', 'patricia']
@@ -24,6 +22,12 @@ def on_test_start(environment, **kwargs):
     response = requests.get(f'{environment.host}/clear')
     if response.status_code != 200:
         raise Exception(f'Error cleaning up: {response.status_code}')
+    response = requests.post(f'{environment.host}/simple_messages/indices')
+    if response.status_code != 200:
+        raise Exception(f'Error creating indices: {response.status_code}')
+    response = requests.get(f'{environment.host}/write_concern')
+    if response.status_code != 200 or response.json()['write_concern'] != 'majority':
+        raise Exception(f'Please set the WRITE_CONCERN env var as majority before starting the app')
 
     # Creating users
     for username in _users:
@@ -46,11 +50,21 @@ class PutMessages(HttpUser):
     def _generate_random_str(length: int = 32):
         return ''.join([choice(string.digits + string.ascii_letters + ' ') for __ in range(length)])
 
-    @task
-    def put_messages(self):
-        self.client.put(f'/rooms/{_room_id}/messages',
+    def _put_messages(self, message_len: int):
+        self.client.put(f'/rooms/{_room_id}/simple_messages',
                         json={'username': self.username,
-                              'message': generate_random_str(randint(1, 512)),
+                              'message': f'{self._generate_random_str(message_len)}',
                               'date': datetime.utcnow().isoformat()}
                         )
 
+    @task
+    def put_small_messages(self):
+        self._put_messages(message_len=50)
+
+    @task
+    def put_medium_messages(self):
+        self._put_messages(message_len=100)
+
+    @task
+    def put_big_messages(self):
+        self._put_messages(message_len=256)

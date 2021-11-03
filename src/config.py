@@ -15,6 +15,6 @@ class ServerConfig:
 
 local_server = ServerConfig(server='localhost')
 docker_server = ServerConfig(server='mongo')
-atlas_server = ServerConfig(server='mongodb+srv://cluster0.jjwcl.mongodb.net', 
+atlas_server = ServerConfig(server=os.getenv('MONGODB_SERVER'),
                             username=os.getenv('MONGODB_USERNAME'),
                             password=os.getenv('MONGODB_PASSWORD'))

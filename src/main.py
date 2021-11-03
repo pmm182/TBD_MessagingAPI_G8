@@ -5,7 +5,8 @@ from pymongo import MongoClient
 
 from config import local_server, docker_server, atlas_server, ServerConfig
 from exceptions import AppError
-from common.routes import register_generic_routes
+from common.routes import register_generic_routes, register_messages_indices_routes, \
+    register_simple_messages_indices_routes
 from messages.message_repository import MessagesByRoomRepository, SimpleMessageRepository
 from messages.routes import register_message_routes, register_simple_message_routes
 from rooms.room_repository import RoomRepository
@@ -23,21 +24,24 @@ def register_error_handler(app_):
 
 def create_app(server_config: ServerConfig):
     app = Flask(__name__)
+    write_concern = os.getenv('WRITE_CONCERN', 1)
     mongo = MongoClient(
         host=server_config.server, port=server_config.port, username=server_config.username,
-        password=server_config.password
+        password=server_config.password, w=write_concern
     )
     database = mongo.get_database(server_config.database)
     user_repository = UserRepository(database)
     room_repository = RoomRepository(database)
     messages_by_room_repository = MessagesByRoomRepository(database)
-    register_generic_routes(app=app, server_config=server_config)
     register_user_routes(app=app, user_repository=user_repository)
     register_room_routes(app=app, user_repository=user_repository, room_repository=room_repository)
     register_message_routes(app=app, room_repository=room_repository, message_repository=messages_by_room_repository)
     simple_message_repository = SimpleMessageRepository(database)
     register_simple_message_routes(app=app, room_repository=room_repository,
                                    message_repository=simple_message_repository)
+    register_generic_routes(app=app, mongo=mongo, database_name=server_config.database)
+    register_messages_indices_routes(app=app, message_repository=messages_by_room_repository)
+    register_simple_messages_indices_routes(app=app, message_repository=simple_message_repository)
     register_error_handler(app)
     return app
 

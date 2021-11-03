@@ -19,4 +19,4 @@ echo "Iniciando shard2..."
 docker-compose -f shard2/docker-compose.yaml up -d
 sleep 10
 ./shard2/mongo_init.sh
-
+./mongos/mongo_init2.sh
