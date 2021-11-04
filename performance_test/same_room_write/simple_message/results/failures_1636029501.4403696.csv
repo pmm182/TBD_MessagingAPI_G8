@@ -1,0 +1,3 @@
+Method,Name,Error,Occurrences
+PUT,/rooms/6183d2eeb79f4524996c325c/simple_messages,"ConnectionResetError(104, 'Connection reset by peer')",5
+PUT,/rooms/6183d2eeb79f4524996c325c/simple_messages,RemoteDisconnected('Remote end closed connection without response'),12
