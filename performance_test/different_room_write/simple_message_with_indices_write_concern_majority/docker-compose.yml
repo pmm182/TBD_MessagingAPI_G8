@@ -4,6 +4,8 @@ services:
   application:
     image: tbd:latest
     env_file: ../../../credentials
+    environment:
+      WRITE_CONCERN: majority
     ports:
       - "8080:8080"
     healthcheck:
@@ -21,6 +23,8 @@ services:
     volumes:
       - ./:/mnt/locust
       - ../base_test.py:/mnt/locust/base_test.py
+      - ../rooms.txt:/mnt/locust/rooms.txt
+      - ../users.txt:/mnt/locust/users.txt
     command: -f /mnt/locust/locust.py --master --config /mnt/locust/locust_docker.conf --csv=g8 --csv-full-history
 
   worker:
