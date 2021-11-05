@@ -1,0 +1,36 @@
+version: '2.4'
+
+services:
+  application:
+    image: tbd:latest
+    env_file: ../../../credentials
+    environment:
+      READ_PREFERENCE: SECONDARY
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "-X", "GET", "http://localhost:8080/health" ]
+      timeout: 20s
+      retries: 10
+
+  master:
+    image: locustio/locust
+    ports:
+      - "8089:8089"
+    depends_on:
+      application:
+        condition: service_healthy
+    volumes:
+      - ./:/mnt/locust
+      - ../base_test.py:/mnt/locust/base_test.py
+    command: -f /mnt/locust/locust.py --master --config /mnt/locust/locust_docker.conf --csv=g8 --csv-full-history
+
+  worker:
+    image: locustio/locust
+    depends_on:
+      application:
+        condition: service_healthy
+    volumes:
+      - ./:/mnt/locust
+      - ../base_test.py:/mnt/locust/base_test.py
+    command: -f /mnt/locust/locust.py --worker --master-host master

@@ -19,6 +19,10 @@ def register_generic_routes(app, mongo: MongoClient, database_name: str):
     def write_concern():
         return jsonify({'write_concern': mongo.write_concern.document.get('w')}), 200
 
+    @app.route('/read_preference', methods=['GET'])
+    def read_preference():
+        return jsonify({'read_preference': str(mongo.read_preference)}), 200
+
 
 def _create_indices(message_repository: MessageRepository):
     message_repository.create_indices()

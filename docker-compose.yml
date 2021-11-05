@@ -26,6 +26,8 @@ services:
     image: tbd:latest
     ports:
       - "8080:8080"
+    environment:
+      ENVIRONMENT: DOCKER
     depends_on:
       mongo:
         condition: service_healthy
