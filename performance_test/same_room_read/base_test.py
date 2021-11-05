@@ -74,7 +74,8 @@ class BaseMessages:
         self.client.put(f'/rooms/{self._room_id}/{self._messages_route}',
                         json={'username': self.username,
                               'message': f'{self._generate_random_str(message_len)}',
-                              'date': datetime.utcnow().isoformat()}
+                              'date': datetime.utcnow().isoformat()},
+                        name=f'/{self._messages_route}'
                         )
 
     def get_messages(self, last_seen: str = None):
