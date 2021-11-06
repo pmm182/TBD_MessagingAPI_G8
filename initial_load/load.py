@@ -1,3 +1,4 @@
+import os
 from queue import Queue, Empty
 from threading import Thread
 
@@ -67,7 +68,7 @@ def _perform_load(queue_: Queue, worker_class, worker_amount: int = 30):
 if __name__ == '__main__':
     # Creating users
     queue = Queue()
-    with open('users.txt') as f:
+    with open(os.path.join(os.path.dirname(__file__), 'users.txt')) as f:
         for line in f.readlines():
             username = line.strip()
             if username:
@@ -77,11 +78,12 @@ if __name__ == '__main__':
 
     # Create room
     queue = Queue()
-    with open('rooms.txt') as f:
+    with open(os.path.join(os.path.dirname(__file__), 'rooms.txt')) as f:
         i = 0
         for line in f.readlines():
             if line.strip():
                 users = [u.strip() for u in line.split(',')]
                 queue.put((f'http://localhost:8080/rooms', f'Test room {i}', users))
+            i += 1
     workers = _perform_load(queue_=queue, worker_class=RoomLoad)
     print('Created rooms')

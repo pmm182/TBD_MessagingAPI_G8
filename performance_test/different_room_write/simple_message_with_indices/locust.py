@@ -21,7 +21,7 @@ def on_test_start(environment, **kwargs):
         )
     else:
         while not _room_per_amount:
-            environment.runner.send_message('send_user_room_per_amount')
+            environment.runner.send_message('send_room_per_amount')
             sleep(1)
 
 

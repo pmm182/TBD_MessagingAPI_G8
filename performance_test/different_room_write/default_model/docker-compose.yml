@@ -5,7 +5,7 @@ services:
     image: tbd:latest
     env_file: ../../../credentials
     volumes:
-      - ../dump:/mnt/dump
+      - ../../dump:/mnt/dump
     ports:
       - "8080:8080"
     healthcheck:
@@ -22,7 +22,6 @@ services:
         condition: service_healthy
     volumes:
       - ./:/mnt/locust
-      - ../dump:/mnt/dump
       - ../base_test.py:/mnt/locust/base_test.py
     command: -f /mnt/locust/locust.py --master --config /mnt/locust/locust_docker.conf --csv=g8 --csv-full-history
 
