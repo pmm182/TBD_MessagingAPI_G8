@@ -22,6 +22,10 @@ class MessageRepository(ABC):
     def create_indices(self):
         pass
 
+    @abstractmethod
+    def get_amount(self):
+        pass
+
 
 class MessagesByRoomRepository(MessageRepository):
 
@@ -63,6 +67,9 @@ class MessagesByRoomRepository(MessageRepository):
             ('room_id', pymongo.ASCENDING), ('partition_date', pymongo.ASCENDING)
         ])
 
+    def get_amount(self):
+        return self._messages_collection.count()
+
 
 class SimpleMessageRepository(MessageRepository):
 
@@ -93,3 +100,6 @@ class SimpleMessageRepository(MessageRepository):
         self._messages_collection.create_index([
             ('room_id', pymongo.ASCENDING), ('partition_date', pymongo.ASCENDING)
         ])
+
+    def get_amount(self):
+        return self._messages_collection.count()

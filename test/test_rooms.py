@@ -1,4 +1,4 @@
-from test.common import TestCommon
+from test.test_common import TestCommon
 
 
 class TestRooms(TestCommon):

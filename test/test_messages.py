@@ -1,4 +1,4 @@
-from test.common import TestCommon
+from test.test_common import TestCommon
 
 
 class TestBaseMessages(TestCommon):
@@ -12,6 +12,23 @@ class TestBaseMessages(TestCommon):
             self.test_client.put('/users', json={'username': member})
         response = self.test_client.put('/rooms', json={'members': members})
         return response.json['room_id']
+
+    def test_messages_amount__no_message(self):
+        if not self.path:
+            return
+
+        # FIXTURE
+        username = 'test_user'
+        room_id = self._create_room([username, 'test_user2'])
+
+        # EXECUTE
+        response = self.test_client.get(
+            f'/rooms/{room_id}/{self.path}/amount'
+        )
+
+        # VERIFY
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(0, response.json['amount'])
 
     def test_create_message__success_get_message(self):
         if not self.path:
@@ -38,6 +55,10 @@ class TestBaseMessages(TestCommon):
         messages = get_response.json
         self.assertEqual(1, len(messages))
         self.assertEqual({'from': username, 'date': date, 'message': message}, messages[0])
+        get_amount_response = self.test_client.get(
+            f'/rooms/{room_id}/{self.path}/amount'
+        )
+        self.assertEqual(1, get_amount_response.json['amount'])
 
     def test_get_messages__multiple_messages(self):
         if not self.path:
