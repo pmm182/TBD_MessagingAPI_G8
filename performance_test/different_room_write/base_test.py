@@ -8,6 +8,7 @@ from datetime import datetime
 from random import choice
 
 
+
 def _setup_test(
         environment, create_indices: bool, message_base_route: str, write_concern_majority: bool
 ):
@@ -27,7 +28,6 @@ def _setup_test(
         response = requests.get(f'{environment.host}/write_concern')
         if response.status_code != 200 or response.json()['write_concern'] != 'majority':
             raise Exception(f'Please set the WRITE_CONCERN env var as majority before starting the app')
-
     response = requests.get(f'{environment.host}/rooms')
     response_data = response.json()
     if expected_room_amount != len(response_data):

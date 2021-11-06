@@ -21,3 +21,4 @@ def register_generic_routes(app, mongo: MongoClient, database_name: str):
     def read_preference():
         return jsonify({'read_preference': str(mongo.read_preference)}), 200
 
+
