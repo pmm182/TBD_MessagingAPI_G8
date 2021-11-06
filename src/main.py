@@ -5,8 +5,7 @@ from pymongo import MongoClient, ReadPreference
 
 from config import local_server, docker_server, atlas_server, ServerConfig
 from exceptions import AppError
-from common.routes import register_generic_routes, register_messages_indices_routes, \
-    register_simple_messages_indices_routes
+from common.routes import register_generic_routes
 from messages.message_repository import MessagesByRoomRepository, SimpleMessageRepository
 from messages.routes import register_message_routes, register_simple_message_routes
 from rooms.room_repository import RoomRepository
@@ -41,8 +40,6 @@ def create_app(server_config: ServerConfig):
     register_simple_message_routes(app=app, room_repository=room_repository,
                                    message_repository=simple_message_repository)
     register_generic_routes(app=app, mongo=mongo, database_name=server_config.database)
-    register_messages_indices_routes(app=app, message_repository=messages_by_room_repository)
-    register_simple_messages_indices_routes(app=app, message_repository=simple_message_repository)
     register_error_handler(app)
     return app
 

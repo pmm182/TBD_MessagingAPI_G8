@@ -2,42 +2,42 @@ from time import sleep
 
 from locust.runners import WorkerRunner
 
-from base_test import _send_user_room_per_amount, _receive_user_room_per_amount, _on_locust_init, BasePutMessages, _setup_test
+from base_test import _send_room_per_amount, _receive_room_per_amount, _on_locust_init, BasePutMessages, _setup_test
 
 from locust import events, task, HttpUser
 
 
-_user_room_per_amount = None
+_room_per_amount = None
 _messages_route = 'simple_messages'
 
 
 @events.test_start.add_listener
 def on_test_start(environment, **kwargs):
-    global _user_room_per_amount
+    global _room_per_amount
 
     if not isinstance(environment.runner, WorkerRunner):
-        _user_room_per_amount = _setup_test(
+        _room_per_amount = _setup_test(
             environment, create_indices=True, message_base_route=_messages_route, write_concern_majority=True
         )
     else:
-        while not _user_room_per_amount:
-            environment.runner.send_message('send_user_room_per_amount')
+        while not _room_per_amount:
+            environment.runner.send_message('send_room_per_amount')
             sleep(1)
 
 
-def send_user_room_per_amount(environment, msg, **kwargs):
-    _send_user_room_per_amount(environment, user_room_per_amount=_user_room_per_amount)
+def send_room_per_amount(environment, msg, **kwargs):
+    _send_room_per_amount(environment, room_per_amount=_room_per_amount)
 
 
-def receive_user_room_per_amount(msg, **kwargs):
-    global _user_room_per_amount
-    _user_room_per_amount = _receive_user_room_per_amount(msg)
+def receive_room_per_amount(msg, **kwargs):
+    global _room_per_amount
+    _room_per_amount = _receive_room_per_amount(msg)
 
 
 @events.init.add_listener
 def on_locust_init(environment, **_kwargs):
-    _on_locust_init(environment, send_user_room_per_amount_func=send_user_room_per_amount,
-                    receive_user_room_per_amount_func=receive_user_room_per_amount)
+    _on_locust_init(environment, send_room_per_amount_func=send_room_per_amount,
+                    receive_room_per_amount_func=receive_room_per_amount)
 
 
 class PutMessages(HttpUser):
@@ -45,7 +45,7 @@ class PutMessages(HttpUser):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._base_test = BasePutMessages(
-            user_room_per_amount=_user_room_per_amount,
+            room_per_amount=_room_per_amount,
             messages_route=_messages_route,
             client=self.client
         )

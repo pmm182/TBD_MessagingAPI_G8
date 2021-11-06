@@ -1,4 +1,4 @@
-from test.common import TestCommon
+from test.test_common import TestCommon
 
 
 class TestRooms(TestCommon):
@@ -41,6 +41,7 @@ class TestRooms(TestCommon):
         response1 = self.test_client.put('/rooms', json={'members': ['test_user', 'test_user2']})
         response2 = self.test_client.put('/rooms', json={'members': ['test_user', 'test_user3']})
         response3 = self.test_client.put('/rooms', json={'members': ['test_user', 'test_user3', 'test_user2']})
+        response4 = self.test_client.put('/rooms', json={'members': ['test_user3', 'test_user2']})
         expected_room_ids = {response.json['room_id'] for response in (response1, response2, response3)}
 
         # EXECUTE
@@ -60,3 +61,28 @@ class TestRooms(TestCommon):
 
         # VERIFY
         self.assertEqual(404, get_response.status_code)
+
+    def test_get_rooms__rooms_exist__return_all(self):
+        # FIXTURE
+        self.test_client.put('/users', json={'username': 'test_user'})
+        self.test_client.put('/users', json={'username': 'test_user2'})
+        self.test_client.put('/users', json={'username': 'test_user3'})
+        response1 = self.test_client.put('/rooms', json={'members': ['test_user', 'test_user2']})
+        response2 = self.test_client.put('/rooms', json={'members': ['test_user', 'test_user3']})
+        response3 = self.test_client.put('/rooms', json={'members': ['test_user', 'test_user3', 'test_user2']})
+        response4 = self.test_client.put('/rooms', json={'members': ['test_user3', 'test_user2']})
+        expected_room_ids = {response.json['room_id'] for response in (response1, response2, response3, response4)}
+
+        # EXECUTE
+        get_response = self.test_client.get('/rooms')
+
+        # VERIFY
+        self.assertEqual(expected_room_ids, {room['id'] for room in get_response.json})
+
+    def test_get_rooms__no_room__return_empty(self):
+        # EXECUTE
+        get_response = self.test_client.get('/rooms')
+
+        # VERIFY
+        self.assertEqual(200, get_response.status_code)
+        self.assertEqual([], get_response.json)
