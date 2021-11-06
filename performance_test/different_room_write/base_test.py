@@ -16,7 +16,7 @@ def _setup_test(
 ):
     user_room_per_amount = {}
     print(f'Cleaning up for tests in {message_base_route}...')
-    response = requests.get(f'{environment.host}/clear')
+    response = requests.get(f'{environment.host}/{message_base_route}')
     if response.status_code != 200:
         raise Exception(f'Error cleaning up: {response.status_code}')
     if create_indices:

@@ -27,3 +27,8 @@ def register_room_routes(app, room_repository: RoomRepository, user_repository: 
     def get_rooms_by_user(username: str):
         rooms = room_repository.get_rooms_by_member(username=username)
         return jsonify([room.to_dict() for room in rooms]), 200
+
+    @app.route('/rooms', methods=['GET'])
+    def get_rooms():
+        rooms = room_repository.get_rooms()
+        return jsonify([room.to_dict() for room in rooms]), 200

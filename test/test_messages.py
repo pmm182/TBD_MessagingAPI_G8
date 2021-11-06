@@ -23,7 +23,7 @@ class TestBaseMessages(TestCommon):
 
         # EXECUTE
         response = self.test_client.get(
-            f'/rooms/{room_id}/{self.path}/amount'
+            f'/{self.path}/amount'
         )
 
         # VERIFY
@@ -56,7 +56,7 @@ class TestBaseMessages(TestCommon):
         self.assertEqual(1, len(messages))
         self.assertEqual({'from': username, 'date': date, 'message': message}, messages[0])
         get_amount_response = self.test_client.get(
-            f'/rooms/{room_id}/{self.path}/amount'
+            f'/{self.path}/amount'
         )
         self.assertEqual(1, get_amount_response.json['amount'])
 

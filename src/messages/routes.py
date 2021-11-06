@@ -6,6 +6,11 @@ from messages.message_repository import MessageRepository
 from rooms.room_repository import RoomRepository
 
 
+def _create_indices(message_repository: MessageRepository):
+    message_repository.create_indices()
+    return jsonify({'message': 'Indices created'}), 200
+
+
 def _create_message(id_, request_json: dict, room_repository: RoomRepository,
                     message_repository: MessageRepository):
     room_id = id_
@@ -57,9 +62,13 @@ def register_message_routes(app, room_repository: RoomRepository, message_reposi
         return _get_messages(id_=id_, request_json=request.json, room_repository=room_repository,
                              message_repository=message_repository)
 
-    @app.route('/rooms/<id_>/messages/amount', methods=['GET'])
-    def get_messages_amount(id_):
+    @app.route('/messages/amount', methods=['GET'])
+    def get_messages_amount():
         return _get_messages_amount(message_repository)
+
+    @app.route('/messages/indices', methods=['POST'])
+    def create_message_indices():
+        return _create_indices(message_repository=message_repository)
 
 
 def register_simple_message_routes(app, room_repository: RoomRepository, message_repository: MessageRepository):
@@ -74,6 +83,10 @@ def register_simple_message_routes(app, room_repository: RoomRepository, message
         return _get_messages(id_=id_, request_json=request.json, room_repository=room_repository,
                              message_repository=message_repository)
 
-    @app.route('/rooms/<id_>/simple_messages/amount', methods=['GET'])
-    def get_simple_messages_amount(id_):
+    @app.route('/simple_messages/amount', methods=['GET'])
+    def get_simple_messages_amount():
         return _get_messages_amount(message_repository)
+
+    @app.route('/simple_messages/indices', methods=['POST'])
+    def create_simple_message_indices():
+        return _create_indices(message_repository=message_repository)
