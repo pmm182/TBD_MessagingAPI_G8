@@ -29,14 +29,21 @@ def create_app(server_config: ServerConfig):
         host=server_config.server, port=server_config.port, username=server_config.username,
         password=server_config.password, w=write_concern, read_preference=getattr(ReadPreference, preference)
     )
+    enable_sharding = False
+    if os.getenv('ENABLE_SHARDING') == 'true':
+        enable_sharding = True
+        result = mongo.admin.command('enableSharding', server_config.database)
+        if result['ok'] != 1:
+            raise Exception('Could not enable sharding')
+    partition_interval = os.getenv('PARTITION_INTERVAL', 'days')
     database = mongo.get_database(server_config.database)
     user_repository = UserRepository(database)
     room_repository = RoomRepository(database)
-    messages_by_room_repository = MessagesByRoomRepository(database)
+    messages_by_room_repository = MessagesByRoomRepository(database, enable_sharding, partition_interval)
     register_user_routes(app=app, user_repository=user_repository)
     register_room_routes(app=app, user_repository=user_repository, room_repository=room_repository)
     register_message_routes(app=app, room_repository=room_repository, message_repository=messages_by_room_repository)
-    simple_message_repository = SimpleMessageRepository(database)
+    simple_message_repository = SimpleMessageRepository(database, enable_sharding)
     register_simple_message_routes(app=app, room_repository=room_repository,
                                    message_repository=simple_message_repository)
     register_generic_routes(app=app, mongo=mongo, database_name=server_config.database)
