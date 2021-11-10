@@ -45,7 +45,12 @@ class MessagesByRoomRepository(MessageRepository):
 
     def insert_message(self, message: Message):
         mongo_message = {'from': message.from_, 'date': message.date, 'message': message.message}
-        partition_start = message.date.date()
+        if self._partition_interval == 'days':
+            partition_start = message.date.date()
+        elif self._partition_interval == 'minutes':
+            partition_start = message.date.replace(second=0, microsecond=0)
+        else:
+            raise NotImplementedError()
         partition_end = partition_start + timedelta(**{self._partition_interval: 1})
 
         query = {
