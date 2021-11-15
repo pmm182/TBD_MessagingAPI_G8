@@ -1,0 +1,3 @@
+Method,Name,Error,Occurrences
+GET,/simple_messages/full,RemoteDisconnected('Remote end closed connection without response'),1
+PUT,/simple_messages,RemoteDisconnected('Remote end closed connection without response'),1
