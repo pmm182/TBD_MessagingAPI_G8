@@ -68,7 +68,7 @@ class PutMessages(HttpUser):
     def put_in_room_with_10_users(self):
         self._base_test.put_messages(message_len=200, amount_per_room=10)
 
-    @task(2)
+    @task(3)
     def get_messages_room_with_2(self):
         self._base_test.get_messages(amount_per_room=2, use_last_seen_control=True)
 
@@ -84,7 +84,7 @@ class PutMessages(HttpUser):
     def get_messages_room_with_10(self):
         self._base_test.get_messages(amount_per_room=10, use_last_seen_control=True)
 
-    @task(3)
+    @task(1)
     def get_full_messages_room_with_2(self):
         self._base_test.get_messages(amount_per_room=2, use_last_seen_control=False)
 
