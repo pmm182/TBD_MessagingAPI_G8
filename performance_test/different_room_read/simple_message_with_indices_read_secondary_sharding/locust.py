@@ -52,39 +52,39 @@ class PutMessages(HttpUser):
             client=self.client
         )
 
-    @task(1)
+    @task(10)
     def put_in_room_with_2_users(self):
         self._base_test.put_messages(message_len=200, amount_per_room=2)
 
-    @task(1)
+    @task(2)
     def put_in_room_with_3_users(self):
         self._base_test.put_messages(message_len=200, amount_per_room=3)
 
-    @task(1)
+    @task(4)
     def put_in_room_with_5_users(self):
         self._base_test.put_messages(message_len=200, amount_per_room=5)
 
-    @task(1)
+    @task(4)
     def put_in_room_with_10_users(self):
         self._base_test.put_messages(message_len=200, amount_per_room=10)
 
-    @task(3)
+    @task(20)
     def get_messages_room_with_2(self):
         self._base_test.get_messages(amount_per_room=2, use_last_seen_control=True)
 
-    @task(3)
+    @task(4)
     def get_messages_room_with_3(self):
         self._base_test.get_messages(amount_per_room=3, use_last_seen_control=True)
 
-    @task(3)
+    @task(8)
     def get_messages_room_with_5(self):
         self._base_test.get_messages(amount_per_room=5, use_last_seen_control=True)
 
-    @task(3)
+    @task(8)
     def get_messages_room_with_10(self):
         self._base_test.get_messages(amount_per_room=10, use_last_seen_control=True)
 
-    @task(1)
+    @task(5)
     def get_full_messages_room_with_2(self):
         self._base_test.get_messages(amount_per_room=2, use_last_seen_control=False)
 
@@ -92,10 +92,10 @@ class PutMessages(HttpUser):
     def get_full_messages_room_with_3(self):
         self._base_test.get_messages(amount_per_room=3, use_last_seen_control=False)
 
-    @task(1)
+    @task(2)
     def get_full_messages_room_with_5(self):
         self._base_test.get_messages(amount_per_room=5, use_last_seen_control=False)
 
-    @task(1)
+    @task(2)
     def get_full_messages_room_with_10(self):
         self._base_test.get_messages(amount_per_room=10, use_last_seen_control=False)
