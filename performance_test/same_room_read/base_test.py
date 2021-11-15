@@ -80,10 +80,8 @@ class BaseMessages:
 
     def get_messages(self, last_seen: str = None):
         param = {'username': self.username}
-        name = f'/{self._messages_route}/full'
         if last_seen:
             param['last_seen'] = last_seen
-            name = f'/{self._messages_route}'
         response = self.client.get(f'/rooms/{self._room_id}/{self._messages_route}',
-                                   json=param, name=name)
+                                   json=param, name=f'/{self._messages_route}')
         return response

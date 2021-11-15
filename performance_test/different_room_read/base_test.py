@@ -90,12 +90,10 @@ class BaseMessages:
         room_id = choice(list(self._room_per_amount[amount_per_room_str].keys()))
         username = choice(self._room_per_amount[amount_per_room_str][room_id])
         param = {'username': username}
-        name = f'/{self._messages_route}/full'
         if use_last_seen_control and room_id in self._last_seen_per_room:
             param['last_seen'] = self._last_seen_per_room[room_id]
-            name = f'/{self._messages_route}'
         response = self.client.get(f'/rooms/{room_id}/{self._messages_route}',
-                                   json=param, name=name)
+                                   json=param, name=f'/{self._messages_route}')
         if response.status_code == 200:
             messages = response.json()
             if messages:

@@ -114,7 +114,7 @@ class SimpleMessageRepository(MessageRepository):
 
     def create_indices(self):
         self._messages_collection.create_index([
-            ('room_id', pymongo.ASCENDING)
+            ('room_id', pymongo.ASCENDING), ('date', pymongo.ASCENDING)
         ])
 
     def get_amount(self):
