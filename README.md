@@ -38,6 +38,12 @@ O projeto consiste em desenvolver uma aplicação que utiliza banco de dados NoS
 * Quando totalmente iniciados, abra um browser e entre no caminho: http://localhost:8089/ .
 * A página do Locust abrirá com a sugestão das variáveis presentes no arquivo de configuração.
 
+![Locust Start](res/locust_start.png)
+
+* Basta clicar no botão "Start Swarming" e os testes serão inicializados.
+* Certifique-se que o arquivo "credentials" com as informações sobre o banco de dados está na raiz do projeto. Este arquivo deve conter os parâmetros MONGODB_HOST, MONGODB_SERVER e MONGODB_CONNECTION_STRING de acordo com as configurações do cluster do Atlas ou do servidor de banco de dados que estiver sendo utilizado.
+* Execute o teste pelo tempo desejado. É possível interromper o teste a qualquer momento utilizando a interface web do Locust bem como fazer download de relatórios em CSV e/ou HTML com os resultados obtidos.
+
 
 ## Colaboradores em ordem alfabética
 [![Eduardo Garcia do Nascimento](https://media-exp1.licdn.com/dms/image/C4E03AQGEPa58IfFEQw/profile-displayphoto-shrink_200_200/0/1552925873680?e=1638403200&v=beta&t=GCfyuRq7bmpMsiPuvDohIKdq2wnSDvf9X9C9spHrJes)](http://github.com/egnascimento) Eduardo Garcia do Nascimento
