@@ -1,4 +1,0 @@
-Method,Name,Error,Occurrences
-PUT,/rooms/6183e1cf86a0af7eca3f993b/messages,HTTPError('500 Server Error: INTERNAL SERVER ERROR for url: http://application:8080/rooms/6183e1cf86a0af7eca3f993b/messages'),2
-PUT,/rooms/6183e1cf86a0af7eca3f993b/messages,RemoteDisconnected('Remote end closed connection without response'),25
-PUT,/rooms/6183e1cf86a0af7eca3f993b/messages,"ConnectionResetError(104, 'Connection reset by peer')",11
