@@ -1,0 +1,5 @@
+Method,Name,Error,Occurrences
+GET,/simple_messages,RemoteDisconnected('Remote end closed connection without response'),125
+PUT,/simple_messages,"ConnectionResetError(104, 'Connection reset by peer')",374
+PUT,/simple_messages,RemoteDisconnected('Remote end closed connection without response'),45
+GET,/simple_messages,"ConnectionResetError(104, 'Connection reset by peer')",879

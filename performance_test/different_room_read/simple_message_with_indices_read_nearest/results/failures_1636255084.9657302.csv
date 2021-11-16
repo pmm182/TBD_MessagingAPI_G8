@@ -1,6 +1,0 @@
-Method,Name,Error,Occurrences
-GET,/simple_messages/full,RemoteDisconnected('Remote end closed connection without response'),22
-GET,/simple_messages,RemoteDisconnected('Remote end closed connection without response'),1
-PUT,/simple_messages,"ConnectionResetError(104, 'Connection reset by peer')",1
-GET,/simple_messages/full,"ConnectionResetError(104, 'Connection reset by peer')",3
-PUT,/simple_messages,RemoteDisconnected('Remote end closed connection without response'),4
