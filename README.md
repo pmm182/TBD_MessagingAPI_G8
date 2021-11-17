@@ -11,68 +11,39 @@ O projeto consiste em desenvolver uma aplicação que utiliza banco de dados NoS
 
 ## Realizando build da imagem da aplicação
 
-* Executar o script **build_image.sh** na raiz do projeto
+* Executar o script **build_image.sh** na raiz do projeto.
+* Execute este comando sempre que fizer alterações no código para atualizar o conteúdo do container responsável pela aplicação.
 
 ## Executar a aplicação
 
 * Executar **docker-compose up** na raiz do projeto
 * Instalar biblioteca requests do python
 
-## Executar o teste
+## Executar o teste com a aplicação cliente
 
 * Executar **python3 setup_test.py** na raiz do projeto
 * Executar **python3 app_test.py** na raiz do projeto (usuários cadastrados: joao, eduardo e patricia)
 
-# Rodando localmente
+# Executar os testes de performance com o Locust
 
-## Pré-requisitos
-Para instalar e utilizar este software, são pré-requisitos:
-* Computador com Linux instalado (preferencialmente Ubuntu).
-* Python >=3.6.
+* Na pasta performance existem pastas para cada grupo de teste.
+* Os testes estão organizados em grupos como segue:
+  * same_room_write: Testes de Escrita em Única Sala.
+  * same_room_read: Testes de Leitura em Única Sala.
+  * different_room_write: Testes de Escrita em Múltiplas Salas.
+  * different_room_read: Testes de Leitura em Múltiplas Salas.
+* Dentro de cada diretório de grupo de testes estão as pastas com os casos de teste.
+* Para iniciar o Locust execute dentro da pasta do caso de teste desejado o comando ```docker-compose up --scale worker=5```.
+* Após executar o comando, aguarde alguns segundos para os containers serem inicializados. 
+* Quando totalmente iniciados, abra um browser e entre no caminho: http://localhost:8089/ .
+* A página do Locust abrirá com a sugestão das variáveis presentes no arquivo de configuração.
 
-Pequenas variações a este pré-requisitos podem ser adotadas desde que haja conhecimento mais abrangente da solução e tecnologias aqui utilizadas.
+![Locust Start](res/locust_start.png)
 
-## Instalação
-Abaixo estão listados os componentes que necessitam ser instalados caso o computador host tenha uma instalação linux limpa.
+* Basta clicar no botão "Start Swarming" e os testes serão inicializados.
+* Certifique-se que o arquivo "credentials" com as informações sobre o banco de dados está na raiz do projeto. Este arquivo deve conter os parâmetros MONGODB_HOST, MONGODB_SERVER e MONGODB_CONNECTION_STRING de acordo com as configurações do cluster do Atlas ou do servidor de banco de dados que estiver sendo utilizado.
+* Execute o teste pelo tempo desejado. É possível interromper o teste a qualquer momento utilizando a interface web do Locust bem como fazer download de relatórios em CSV e/ou HTML com os resultados obtidos.
 
-### MongoDB
-Embora o MongoDB seja um aplicativo bem conhecido, ele não está nos repositórios oficiais do Ubuntu. Portanto, você terá que adicioná-lo manualmente.No entanto, essa é uma grande vantagem porque facilita a instalação e a atualização do aplicativo. Se você estiver usando o Ubuntu 18.04, abra o terminal e adicione a chave PGP do repositório do MongoDB para não comprometer os pacotes baixados:
-
-```console
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
-```
-
-Depois disso, você pode adicionar o repositório do MongoDB sem qualquer problema. Para fazer isso, execute este comando:
-
-```console
-echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
-```
-
-Agora, atualize o comando APT para sincronizar todos os repositórios.
-
-```console
-sudo apt update
-```
-
-Em seguida, instale o MongoDB usando o APT:
-
-```console
-sudo apt-get install -y mongodb
-sudo apt install mongodb-org
-```
-
-No final da instalação, habilite e inicie o serviço do MongoDB. Com isso, você poderá iniciar usando isso.
-
-```console
-sudo systemctl enable mongodb
-sudo systemctl start mongodb
-```
-
-### Python e respectivos pacotes
-Listar aqui como instalar os pacotes e python possivelmente.
-
-## Utilização
-Listar aqui a utilização. Como rodar.
 
 ## Colaboradores em ordem alfabética
 [![Eduardo Garcia do Nascimento](https://media-exp1.licdn.com/dms/image/C4E03AQGEPa58IfFEQw/profile-displayphoto-shrink_200_200/0/1552925873680?e=1638403200&v=beta&t=GCfyuRq7bmpMsiPuvDohIKdq2wnSDvf9X9C9spHrJes)](http://github.com/egnascimento) Eduardo Garcia do Nascimento
