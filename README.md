@@ -33,7 +33,7 @@ O projeto consiste em desenvolver uma aplicação que utiliza banco de dados NoS
   * different_room_write: Testes de Escrita em Múltiplas Salas.
   * different_room_read: Testes de Leitura em Múltiplas Salas.
 * Dentro de cada diretório de grupo de testes estão as pastas com os casos de teste.
-* Para iniciar o Locust execute dentro da pasta do caso de teste desejado o comando ```docker-compose up ```.
+* Para iniciar o Locust execute dentro da pasta do caso de teste desejado o comando ```docker-compose up --scale worker=5```.
 * Após executar o comando, aguarde alguns segundos para os containers serem inicializados. 
 * Quando totalmente iniciados, abra um browser e entre no caminho: http://localhost:8089/ .
 * A página do Locust abrirá com a sugestão das variáveis presentes no arquivo de configuração.
